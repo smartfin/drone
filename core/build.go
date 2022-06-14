@@ -84,6 +84,10 @@ type BuildStore interface {
 	// datastore by deployment target.
 	LatestDeploys(context.Context, int64) ([]*Build, error)
 
+	// ListDeploysByEnv returns the list of builds from the
+	// datastore for specific deployment target.
+	ListDeploysByEnv(context.Context, int64, string, int, int) ([]*Build, error)
+
 	// Pending returns a list of pending builds from the
 	// datastore by repository id (DEPRECATED).
 	Pending(context.Context) ([]*Build, error)
