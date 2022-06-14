@@ -213,6 +213,7 @@ func (s Server) Handler() http.Handler {
 				r.With(acl.CheckWriteAccess()).Delete("/pulls/{pull}", pulls.HandleDelete(s.Repos, s.Builds))
 
 				r.Get("/deployments", deploys.HandleList(s.Repos, s.Builds))
+				r.Get("/deployments/{environment}", deploys.HandleListByEnv(s.Repos, s.Builds))
 				r.With(acl.CheckWriteAccess()).Delete("/deployments/*", deploys.HandleDelete(s.Repos, s.Builds))
 
 				r.Get("/latest", builds.HandleLast(s.Repos, s.Builds, s.Stages))

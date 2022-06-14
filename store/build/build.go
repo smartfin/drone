@@ -144,6 +144,31 @@ func (s *buildStore) LatestDeploys(ctx context.Context, repo int64) ([]*core.Bui
 	return s.latest(ctx, repo, "deployment")
 }
 
+// ListDeploysByEnv returns a list of the latest builds by target deploy.
+func (s *buildStore) ListDeploysByEnv(ctx context.Context, repo int64, env string, limit, offset int) ([]*core.Build, error) {
+	var out []*core.Build
+	err := s.db.View(func(queryer db.Queryer, binder db.Binder) error {
+		params := map[string]interface{}{
+			"build_repo_id": repo,
+			"build_deploy":  env,
+			"limit":         limit,
+			"offset":        offset,
+		}
+		stmt, args, err := binder.BindNamed(queryListBuildsByEnv, params)
+		if err != nil {
+			return err
+		}
+		rows, err := queryer.Query(stmt, args...)
+		if err != nil {
+			return err
+		}
+		out, err = scanRows(rows)
+		return err
+	})
+	return out, err
+	return s.latest(ctx, repo, "deployment")
+}
+
 func (s *buildStore) latest(ctx context.Context, repo int64, event string) ([]*core.Build, error) {
 	var out []*core.Build
 	err := s.db.View(func(queryer db.Queryer, binder db.Binder) error {
@@ -809,4 +834,13 @@ WHERE build_id IN (
 	WHERE latest_repo_id  = :latest_repo_id
 	  AND latest_type     = :latest_type
 )
+`
+
+const queryListBuildsByEnv = queryBase + `
+FROM builds
+WHERE build_repo_id = :build_repo_id
+  AND build_event   = 'promote'
+  AND build_deploy  = :build_deploy
+ORDER BY build_id DESC
+LIMIT :limit OFFSET :offset
 `
