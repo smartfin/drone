@@ -25,8 +25,8 @@ import (
 	"github.com/go-chi/chi"
 )
 
-// HandleList returns an http.HandlerFunc that writes a json-encoded
-// list of build history to the response body.
+// HandleListByEnv returns an http.HandlerFunc that writes a json-encoded
+// list of deploy history in specific environment to the response body.
 func HandleListByEnv(
 	repos core.RepositoryStore,
 	builds core.BuildStore,
@@ -36,8 +36,8 @@ func HandleListByEnv(
 			namespace   = chi.URLParam(r, "owner")
 			name        = chi.URLParam(r, "name")
 			environment = chi.URLParam(r, "environment")
-			page      = r.FormValue("page")
-			perPage   = r.FormValue("per_page")
+			page        = r.FormValue("page")
+			perPage     = r.FormValue("per_page")
 		)
 		offset, _ := strconv.Atoi(page)
 		limit, _ := strconv.Atoi(perPage)

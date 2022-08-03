@@ -886,6 +886,21 @@ func (mr *MockBuildStoreMockRecorder) List(arg0, arg1, arg2, arg3 interface{}) *
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockBuildStore)(nil).List), arg0, arg1, arg2, arg3)
 }
 
+// ListDeploysByEnv mocks base method.
+func (m *MockBuildStore) ListDeploysByEnv(arg0 context.Context, arg1 int64, arg2 string, arg3, arg4 int) ([]*core.Build, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListDeploysByEnv", arg0, arg1, arg2, arg3, arg4)
+	ret0, _ := ret[0].([]*core.Build)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListDeploysByEnv indicates an expected call of ListDeploysByEnv.
+func (mr *MockBuildStoreMockRecorder) ListDeploysByEnv(arg0, arg1, arg2, arg3, arg4 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListDeploysByEnv", reflect.TypeOf((*MockBuildStore)(nil).ListDeploysByEnv), arg0, arg1, arg2, arg3, arg4)
+}
+
 // ListRef mocks base method.
 func (m *MockBuildStore) ListRef(arg0 context.Context, arg1 int64, arg2 string, arg3, arg4 int) ([]*core.Build, error) {
 	m.ctrl.T.Helper()
